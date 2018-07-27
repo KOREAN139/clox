@@ -5,15 +5,18 @@ Implemetation of [lox interpreter](http://www.craftinginterpreters.com/contents.
 Implemented ~4.5 by far.
 
 ## HOW TO USE
-###Install
+
+### Install
 `git clone https://github.com/KOREAN139/clox`
-###Build
+
+### Build
 `make`
-###Execute
+
+### Execute
 `./clox [script]`
-###Clean
+
+### Clean
 `make clean`
 
-##SEE ALSO
+## SEE ALSO
 [Crafting Interpreters](http://www.craftinginterpreters.com/contents.html) by [Bob Nystrom](https://github.com/munificent)
-
