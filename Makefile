@@ -1,6 +1,6 @@
 .SUFFIXES : .c .o
 
-OBJECTS = main.o scanner.o debug.o
+OBJECTS = main.o chunk.o memory.o
 
 CC = gcc
 CFLAGS = -c
@@ -13,7 +13,6 @@ $(TARGET) : $(OBJECTS)
 clean :
 	rm $(TARGET) $(OBJECTS)
 
-main.o : scanner.h debug.h main.c
-scanner.o : scanner.h scanner.c
-debug.o : debug.h debug.c
-
+main.o : common.h main.c
+chunk.o : chunk.h memory.h chunk.c
+memory.o : common.h memory.h memory.c
