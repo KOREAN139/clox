@@ -2,7 +2,7 @@
 Implemetation of [lox interpreter](http://www.craftinginterpreters.com/contents.html) in C
 
 ## DEVELOPMENT STATE
-Implemented ~14.3 by far.
+Implemented ~14.6 by far.
 
 ## HOW TO USE
 

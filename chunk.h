@@ -2,11 +2,13 @@
 #define CLOX_CHUNK_H
 
 #include "common.h"
+#include "value.h"
 
 /* Operation codes */
 typedef enum {
+  OP_CONSTANT,
   OP_RETURN,
-} OpCode;
+} opcode_t;
 
 /*
  * Dynamic array implementation
@@ -16,10 +18,13 @@ typedef struct {
   int count;
   int capacity;
   uint8_t *code;
-} Chunk;
+  int *lines;
+  val_array_t constants;
+} chunk_t;
 
-void init_chunk(Chunk *);
-void free_chunk(Chunk *);
-void write_chunk(Chunk *, uint8_t);
+void init_chunk(chunk_t *);
+void free_chunk(chunk_t *);
+void write_chunk(chunk_t *, uint8_t, int);
+int add_constant(chunk_t *, val_t);
 
 #endif /* CLOX_CHUNK_H */
