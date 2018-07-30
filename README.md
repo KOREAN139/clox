@@ -1,8 +1,8 @@
 # clox
 Implemetation of [lox interpreter](http://www.craftinginterpreters.com/contents.html) in C
 
-## DEVELOPMENT STATE
-Implemented ~14.6 by far.
+## CURRENT DEV STATE
+Implement Chapter 14, challenge 3 (hardcore mode) by far.
 
 ## HOW TO USE
 
