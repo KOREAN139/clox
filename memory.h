@@ -36,8 +36,8 @@ struct block_meta{
 void __free(void *);
 
 /*
- * If any freed block exists, return that block
- * else, make proper block and return that block
+ * return block from freed_block_list, if any
+ * return new block from pool,         otherwise
  */
 void *__malloc(size_t);
 

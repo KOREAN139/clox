@@ -7,6 +7,7 @@
 /* Operation codes */
 typedef enum {
   OP_CONSTANT,
+  OP_CONSTANT_LONG,
   OP_RETURN,
 } opcode_t;
 
@@ -26,5 +27,12 @@ void init_chunk(chunk_t *);
 void free_chunk(chunk_t *);
 void write_chunk(chunk_t *, uint8_t, int);
 int add_constant(chunk_t *, val_t);
+
+/*
+ * Multibyte operand implementation
+ * use OP_CONSTANT,      if index is in uint8_t value range
+ * use OP_CONSTANT_LONG, otherwise
+ */
+void write_constant(chunk_t *, val_t, int);
 
 #endif /* CLOX_CHUNK_H */
