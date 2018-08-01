@@ -15,14 +15,7 @@
 
 #define MAX_HEAP_SIZE 4 * 1024 * 1024
 
-/* Points memory pool which we use as Heap */
-static void *memory_pool;
-
-/* Points very first address of memory which isn't used yet in pool */
-static char *brk_ptr;
-
-/* Points end of memory pool */
-static void *end_pool;
+#define BIN_LIST_SIZE 16
 
 /*
  * Metadata of block
@@ -38,12 +31,6 @@ struct block_meta{
 
 #define GET_BLOCK_META(block) \
         ((struct block_meta *)(block) - 1)
-
-/*
- * List of freed blocks
- * Block within n-th list has [2^n, 2^(n+1))byte size
- */
-static struct block_meta **freed_block_list;
 
 /* Put block in proper bin(in **freed_block_list) */
 void __free(void *);

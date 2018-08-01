@@ -5,6 +5,30 @@
 
 #include "memory.h"
 
+/*
+ * If index is greater than freed_block_list size,
+ * let index point last bin in freed_block_list
+ */
+#define ADJUST_INDEX(index)   \
+        ((index) = (index) < BIN_LIST_SIZE ? (index) : BIN_LIST_SIZE - 1)
+
+/* Points memory pool which we use as Heap */
+static void *memory_pool;
+
+/* Points very first address of memory which isn't used yet in pool */
+static char *brk_ptr;
+
+/* Points end of memory pool */
+static void *end_pool;
+
+/*
+ * List of bin, which contains freed blocks
+ * Block within n-th bin has [2^n, 2^(n+1))byte size (n < BIN_LIST_SIZE - 1)
+ * Block within last bin has [2^(BIN_LIST_SIZE-1), MAX]byte size
+ * MAX = MAX_HEAP_SIZE - BLOCK_META_SIZE - (size of freed_block_list)
+ */
+static struct block_meta **freed_block_list;
+
 /* Request 4MB memory pool from OS, and let memory_pool point the pool */
 static void __attribute__((constructor)) init_heap()
 {
@@ -18,7 +42,8 @@ static void __attribute__((constructor)) init_heap()
 
   /* (16 * sizeof(struct block_meta *))bytes for freed_block_list */
   freed_block_list = (struct block_meta **)memory_pool;
-  brk_ptr = (char *)memory_pool + 16 * sizeof(struct block_meta *);
+  brk_ptr = (char *)memory_pool +
+            BIN_LIST_SIZE * sizeof(struct block_meta *);
   end_pool = (char *)memory_pool + MAX_HEAP_SIZE;
 }
 
@@ -45,6 +70,8 @@ void __free(void *block)
     sz >>= 1;
   }
 
+  ADJUST_INDEX(index);
+
   /* If bin is not empty, link this block to head of this bin*/
   if (freed_block_list[index]) {
     bm->next = freed_block_list[index];
@@ -66,6 +93,8 @@ void *__malloc(size_t size)
     block_size >>= 1;
   }
 
+  ADJUST_INDEX(index);
+
   /* Find proper block in bin */
   for (bm = freed_block_list[index]; bm && bm->sz < size; bm = bm->next) {
     prev = bm;
@@ -82,7 +111,7 @@ void *__malloc(size_t size)
     /* Check whether we can make new block from pool */
     if ((char *)end_pool < brk_ptr + BLOCK_META_SIZE + size) {
       puts("External fragmentation occurs");
-      /* Terminate process for now, need to implement coalescing */
+      /* FIXME Terminate process for now, need to implement coalescing */
       exit(EXIT_FAILURE);
     }
     /* Make new block from pool */
@@ -90,15 +119,15 @@ void *__malloc(size_t size)
     bm->sz = size;
     bm->next = NULL;
 
-    brk_ptr = brk_ptr + BLOCK_META_SIZE + size;
+    brk_ptr += BLOCK_META_SIZE + size;
   }
 
   return bm + 1;
 }
 
 /*
- * If old is 0, return NULL
- * Otherwise,   return proper block
+ * If update is 0, return NULL
+ * Otherwise,      return proper block
  */
 void *__realloc(void *block, size_t old, size_t update)
 {
