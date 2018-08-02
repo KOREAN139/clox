@@ -2,7 +2,7 @@
 Implemetation of [lox interpreter](http://www.craftinginterpreters.com/contents.html) in C
 
 ## CURRENT DEV STATE
-Implement Chapter 14, challenge 2, 3 (hardcore mode) by far.
+Implement Chapter 14 (include all challenges) by far.
 
 ## HOW TO USE
 

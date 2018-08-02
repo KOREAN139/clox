@@ -3,6 +3,31 @@
 #include "debug.h"
 #include "value.h"
 
+/* return line number of opcode which is at given offset */
+static int get_line(line_array_t *lines, int offset)
+{
+  int m;
+  int s = 0;
+  int e = lines->count;
+  line_t *data = lines->data;
+
+  /* Works like std::upper_bound() in C++ */
+  while (s < e) {
+    m = (s + e) / 2;
+    if (data[m].offset <= offset) {
+      s = m + 1;
+    } else {
+      e = m;
+    }
+  }
+
+  /*
+   * Since index of first element which is greater than given element
+   * is e, return data[e - 1].line
+   */
+  return data[e - 1].line;
+}
+
 static int simple_instruction(const char *name, int offset)
 {
   printf("%s\n", name);
@@ -44,10 +69,11 @@ int disassemble_instruction(chunk_t *chunk, int offset)
 {
   printf("%04d ", offset);
 
-  if (offset > 0 && chunk->lines[offset] == chunk->lines[offset-1]) {
+  int line = get_line(&chunk->lines, offset);
+  if (offset > 0 && line == get_line(&chunk->lines, offset - 1)) {
     printf("   | ");
   } else {
-    printf("%4d ", chunk->lines[offset]);
+    printf("%4d ", line);
   }
 
   uint8_t instruction = chunk->code[offset];
@@ -63,4 +89,3 @@ int disassemble_instruction(chunk_t *chunk, int offset)
     return offset + 1;
   }
 }
-

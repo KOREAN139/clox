@@ -23,7 +23,7 @@
  * next points next freed block if any
  * block is returned when {m,re}alloc is called
  */
-struct block_meta{
+struct block_meta {
   uint32_t sz;
   struct block_meta *next;
 };

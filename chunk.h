@@ -12,6 +12,24 @@ typedef enum {
 } opcode_t;
 
 /*
+ * Assume that line and offset is strictly increasing 
+ * (If this interpreter walks script more than once, need to
+ *  implement other way)
+ * line = line number
+ * offset = first offset in line
+ */
+typedef struct {
+  int line;
+  int offset;
+} line_t;
+
+typedef struct {
+  int count;
+  int capacity;
+  line_t *data;
+} line_array_t;
+
+/*
  * Dynamic array implementation
  * Capacity grows exponential when it's full
  */
@@ -19,11 +37,13 @@ typedef struct {
   int count;
   int capacity;
   uint8_t *code;
-  int *lines;
+  line_array_t lines;
   val_array_t constants;
 } chunk_t;
 
+void init_line_array(line_array_t *);
 void init_chunk(chunk_t *);
+void free_line_array(line_array_t *);
 void free_chunk(chunk_t *);
 void write_chunk(chunk_t *, uint8_t, int);
 int add_constant(chunk_t *, val_t);
