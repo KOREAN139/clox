@@ -61,7 +61,7 @@ void write_chunk(chunk_t *chunk, uint8_t byte, int line)
   }
 
   lines->data[lines->count].line = line;
-  /* Since offset increase by 1 */
+  /* Since offset just increased by 1 */
   lines->data[lines->count].offset = chunk->count - 1;
   lines->count++;
 }

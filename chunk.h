@@ -14,7 +14,7 @@ typedef enum {
 /*
  * Assume that line and offset is strictly increasing 
  * (If this interpreter walks script more than once, need to
- *  implement other way)
+ *  implement in other way)
  * line = line number
  * offset = first offset in line
  */

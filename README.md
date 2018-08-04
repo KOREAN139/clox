@@ -2,7 +2,9 @@
 Implemetation of [lox interpreter](http://www.craftinginterpreters.com/contents.html) in C
 
 ## CURRENT DEV STATE
-Implement Chapter 14 (include all challenges) by far.
+### Done
+Chapter 14 (include all challenges).
+~ Chapter 15.2
 
 ## HOW TO USE
 
