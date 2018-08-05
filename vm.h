@@ -24,5 +24,7 @@ typedef enum {
 void init_VM();
 void free_VM();
 interpret_result_t interpret(chunk_t *);
+void push(val_t);
+val_t pop();
 
 #endif /* CLOX_VM_H */
