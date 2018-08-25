@@ -5,6 +5,7 @@ Implemetation of [lox interpreter](http://www.craftinginterpreters.com/contents.
 ### Done
 Chapter 14 (include all challenges).
 Chapter 15 but challenges.
+Chapter 16 but challenges.
 
 ## HOW TO USE
 
