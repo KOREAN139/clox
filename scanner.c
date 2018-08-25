@@ -92,6 +92,8 @@ static void skip_whitespace()
       if (peek_next() == '/') {
         while (peek() != '\n' && !is_at_end())
           advance();
+      } else {
+        return;
       }
       break;
     case '\n':
