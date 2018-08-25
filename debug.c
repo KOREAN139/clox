@@ -60,9 +60,8 @@ void disassemble_chunk(chunk_t *chunk, const char *name)
 {
   printf("== %s ==\n", name);
 
-  for (int i = 0; i < chunk->count; ) {
+  for (int i = 0; i < chunk->count; )
     i = disassemble_instruction(chunk, i);
-  }
 }
 
 int disassemble_instruction(chunk_t *chunk, int offset)

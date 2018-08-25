@@ -66,16 +66,14 @@ void __free(void *block)
   bm->next = NULL;
 
   /* Index will be floor(log2(sz)) */
-  for (int sz = bm->sz; sz; index++) {
+  for (int sz = bm->sz; sz; index++)
     sz >>= 1;
-  }
 
   ADJUST_INDEX(index);
 
   /* If bin is not empty, link this block to head of this bin*/
-  if (freed_block_list[index]) {
+  if (freed_block_list[index])
     bm->next = freed_block_list[index];
-  }
 
   /* This block is the head of bin now */
   freed_block_list[index] = bm;
@@ -89,23 +87,20 @@ void *__malloc(size_t size)
   struct block_meta *prev = NULL;
 
   /* Index will be floor(log2(size)) */
-  for (block_size = size; block_size; index++) {
+  for (block_size = size; block_size; index++)
     block_size >>= 1;
-  }
 
   ADJUST_INDEX(index);
 
   /* Find proper block in bin */
-  for (bm = freed_block_list[index]; bm && bm->sz < size; bm = bm->next) {
+  for (bm = freed_block_list[index]; bm && bm->sz < size; bm = bm->next)
     prev = bm;
-  }
 
   if (bm) {
     /* Pop out proper block */
     prev->next = bm->next;
-    if (bm == freed_block_list[index]) {
+    if (bm == freed_block_list[index])
       freed_block_list[index] = NULL;
-    }
     bm->next = NULL;
   } else {
     /* Check whether we can make new block from pool */
@@ -131,13 +126,11 @@ void *__malloc(size_t size)
  */
 void *__realloc(void *block, size_t old, size_t update)
 {
-  if (!old) {
+  if (!old)
     return __malloc(update);
-  }
 
-  if (!update) {
+  if (!update)
     __free(block);
-  }
 
   struct block_meta *bm = GET_BLOCK_META(block);
   void *new_block = (void *)0;

@@ -49,9 +49,8 @@ void write_chunk(chunk_t *chunk, uint8_t byte, int line)
   chunk->count++;
 
   /* If work on same line, no need to store line info */
-  if (lines->count && lines->data[lines->count - 1].line == line) {
+  if (lines->count && lines->data[lines->count - 1].line == line)
     return;
-  }
 
   if (!lines->count || lines->count == lines->capacity) {
     int old = lines->capacity;
