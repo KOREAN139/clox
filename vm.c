@@ -5,7 +5,7 @@
 #include "debug.h"
 #include "vm.h"
 
-vm_t vm;
+static vm_t vm;
 
 static void reset_stack()
 {
@@ -102,6 +102,19 @@ static interpret_result_t run()
 
 interpret_result_t interpret(const char *source)
 {
-  compile(source);
+  chunk_t chunk;
+  init_chunk(&chunk);
+
+  if (!compile(source, &chunk)) {
+    free_chunk(&chunk);
+    return INTERPRET_COMPILE_ERROR;
+  }
+
+  vm.chunk = &chunk;
+  vm.ip = vm.chunk->code;
+
+  interpret_result_t result = run();
+
+  free_chunk(&chunk);
   return INTERPRET_OK;
 }
