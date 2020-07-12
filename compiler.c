@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 
 #include "common.h"
 #include "compiler.h"
@@ -72,14 +73,51 @@ static void emit_byte(uint8_t byte)
   write_chunk(current_chunk(), byte, parser.previous.line);
 }
 
+static void emit_bytes(int count, ...)
+{
+  va_list byte_list;
+  va_start(byte_list, count);
+  for (int i = 0; i < count; i++) {
+    uint8_t byte = (uint8_t) va_arg(byte_list, int);
+    emit_byte(byte);
+  }
+  va_end(byte_list);
+}
+
 static void emit_return()
 {
   emit_byte(OP_RETURN);
 }
 
+static uint8_t make_constant(val_t value)
+{
+  int constant = add_constant(current_chunk(), value);
+  if (constant > UINT8_MAX) {
+    error("Too many constants in one chunk.");
+    return 0;
+  }
+
+  return (uint8_t) constant;
+}
+
+static void emit_constant(val_t value)
+{ 
+  emit_bytes(2, OP_CONSTANT, make_constant(value));
+}
+
 static void end_compiler()
 {
   emit_return();
+}
+
+static void number()
+{
+  double value = strtod(parser.previous.start, NULL);
+  emit_constant(value);
+}
+
+static void expression()
+{
 }
 
 bool compile(const char *source, chunk_t *chunk)
